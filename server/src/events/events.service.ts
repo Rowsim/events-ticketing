@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Event } from '../../entity/Event';
-import { PROVIDER_NAMES } from '../../provider-constants';
+import { Event } from '../entity/Event';
+import { PROVIDER_NAMES } from '../provider-constants';
 import { EntityManager, Repository } from 'typeorm';
-import { CreateEventDto } from '../dto/create.dto';
-import { Venue } from '../../entity/Venue';
-import { Ticket } from '../../entity/Ticket';
+import { CreateEventDto } from './dto/create.dto';
+import { Venue } from '../entity/Venue';
+import { Ticket } from '../entity/Ticket';
 
 @Injectable()
 export class EventsService {

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, Post } from '@nestjs/common';
-import { EventsService } from '../services/events.service';
-import { CreateEventDto } from '../dto/create.dto';
+import { EventsService } from './events.service';
+import { CreateEventDto } from './dto/create.dto';
 
 @Controller()
 export class EventsController {
