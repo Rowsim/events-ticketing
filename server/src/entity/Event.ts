@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { Venue } from "./Venue"
 import { Ticket } from "./Ticket"
+import { User } from "./User"
 
 @Entity()
 export class Event {
@@ -14,12 +15,13 @@ export class Event {
     date: Date
 
     @ManyToOne(() => Venue)
-    @JoinColumn()
     venue: Venue
 
     @OneToMany(() => Ticket, (ticket => ticket.event))
-    @JoinColumn()
     tickets: Ticket[]
+
+    @ManyToOne(() => User)
+    author: User
 
     @Column()
     imageUrl?: string

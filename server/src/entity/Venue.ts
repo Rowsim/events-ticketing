@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { Event } from "./Event"
 
 @Entity()
@@ -13,7 +13,6 @@ export class Venue {
     location: string
 
     @OneToMany(() => Event, (event => event.venue))
-    @JoinColumn()
     event: Event[]
 
     @Column()

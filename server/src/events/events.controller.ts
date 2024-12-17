@@ -1,6 +1,7 @@
-import { Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller()
 export class EventsController {
@@ -11,7 +12,7 @@ export class EventsController {
         try {
             const event = await this.eventsService.getEventWithAvailableTickets(Number(eventId))
             if (!event) return new NotFoundException(eventId)
-            return JSON.stringify(event)
+            return event
         } catch (e) {
             console.error(e)
             throw new InternalServerErrorException('Unexpected error');
@@ -28,11 +29,11 @@ export class EventsController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post("/event")
-    async createEvent(@Body() createEventDto: CreateEventDto) {
+    async createEvent(@Body() createEventDto: CreateEventDto, @Req() request) {
         try {
-            await this.eventsService.createEvent(createEventDto)
-            return 'Created'
+            return await this.eventsService.createEvent({ ...createEventDto, userId: request?.user?.sub })
         } catch (e) {
             console.error(e)
             throw new InternalServerErrorException('Unexpected error');

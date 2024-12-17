@@ -5,6 +5,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create.dto';
 import { Venue } from '../entity/Venue';
 import { Ticket } from '../entity/Ticket';
+import { User } from '../entity/User';
 
 @Injectable()
 export class EventsService {
@@ -27,7 +28,7 @@ export class EventsService {
     }
 
     async createEvent(createEventDto: CreateEventDto) {
-        const { name, dateTimestamp, ticketsToGenerate, venueId, imageUrl } = createEventDto
+        const { name, dateTimestamp, ticketsToGenerate, venueId, userId, imageUrl } = createEventDto
 
         return await this.entityManager.transaction(async (manager) => {
             const venueRepository = manager.getRepository(Venue);
@@ -42,7 +43,8 @@ export class EventsService {
                 date: new Date(dateTimestamp),
                 imageUrl,
                 venue,
-                tickets: []
+                tickets: [],
+                author: { id: userId } as unknown as User
             }))
 
             const ticketRepository = manager.getRepository(Ticket);

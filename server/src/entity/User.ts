@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, Index } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from "typeorm"
 import { Booking } from "./Booking"
 
 @Entity()
@@ -14,6 +14,5 @@ export class User {
     password: string
 
     @OneToMany(() => Booking, (booking) => booking.user)
-    @JoinColumn()
     bookings: Booking[]
 }
