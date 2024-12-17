@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Index } from "typeorm"
 import { Booking } from "./Booking"
 import { Event } from './Event'
 
+@Index('idx_ticket_complete_reservation', ['complete', 'reservationExpiry'])
 @Entity()
 export class Ticket {
     @PrimaryGeneratedColumn()
@@ -15,4 +16,10 @@ export class Ticket {
 
     @ManyToOne(() => Event)
     event: Event
+
+    @Column('bigint', { nullable: true })
+    reservationExpiry?: number
+
+    @Column('boolean', { default: false })
+    complete?: boolean
 }

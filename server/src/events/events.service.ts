@@ -11,7 +11,6 @@ import { User } from '../entity/User';
 export class EventsService {
     constructor(
         @Inject(PROVIDER_NAMES.EVENTS_REPOSITORY) private eventRepository: Repository<Event>,
-        @Inject(PROVIDER_NAMES.VENUE_REPOSITORY) private venueRepository: Repository<Venue>,
         @Inject(PROVIDER_NAMES.TICKET_REPOSITORY) private ticketRepository: Repository<Ticket>,
         @Inject(PROVIDER_NAMES.ENTITY_MANAGER) private entityManager: EntityManager,
     ) { }

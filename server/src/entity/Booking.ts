@@ -11,15 +11,15 @@ export class Booking {
     @ManyToOne(() => Event)
     event: Event
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     user: User
 
     @OneToMany(() => Ticket, (ticket => ticket.booking))
     tickets: Ticket[]
 
-    @Column()
+    @Column('boolean', { default: false })
     complete: boolean
 
-    @Column()
+    @Column("bigint")
     expiresAt: number
 }

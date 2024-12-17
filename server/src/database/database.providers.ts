@@ -32,5 +32,30 @@ export const databaseProviders = [
         provide: PROVIDER_NAMES.ENTITY_MANAGER,
         useFactory: (dataSource: DataSource) => dataSource.manager,
         inject: [PROVIDER_NAMES.DATA_SOURCE],
-      },
+    },
+    {
+        provide: PROVIDER_NAMES.EVENTS_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource?.getRepository(Event),
+        inject: [PROVIDER_NAMES.DATA_SOURCE],
+    },
+    {
+        provide: PROVIDER_NAMES.VENUE_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource?.getRepository(Venue),
+        inject: [PROVIDER_NAMES.DATA_SOURCE],
+    },
+    {
+        provide: PROVIDER_NAMES.TICKET_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource?.getRepository(Ticket),
+        inject: [PROVIDER_NAMES.DATA_SOURCE],
+    },
+    {
+        provide: PROVIDER_NAMES.VENUE_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource?.getRepository(Venue),
+        inject: [PROVIDER_NAMES.DATA_SOURCE],
+    },
+    {
+        provide: PROVIDER_NAMES.BOOKING_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource?.getRepository(Booking),
+        inject: [PROVIDER_NAMES.DATA_SOURCE],
+    },
 ];
