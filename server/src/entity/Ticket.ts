@@ -11,9 +11,11 @@ export class Ticket {
     @Column('float')
     price: number
 
+    @Index()
     @ManyToOne(() => Booking)
     booking?: Booking
 
+    @Index()
     @ManyToOne(() => Event)
     event: Event
 

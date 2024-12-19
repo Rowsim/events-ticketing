@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Booking } from "../entity/Booking";
 import { Repository } from "typeorm";
 import { PROVIDER_NAMES } from "../provider-constants";
-import { CreateBookingDto } from "./dto/create-booking.dto";
 import { Event } from "../entity/Event";
 import { Ticket } from "../entity/Ticket";
 
@@ -15,9 +14,9 @@ export class BookingsService {
         @Inject(PROVIDER_NAMES.EVENTS_REPOSITORY) private eventsRepository: Repository<Event>,
     ) { }
 
-    async getUserBookings(userId: number) {
+    async getUserCompleteBookings(userId: number) {
         return await this.bookingRepository.find({
-            where: { user: { id: userId } },
+            where: { user: { id: userId }, complete: true },
             relations: ['event', 'tickets']
         })
     }
@@ -30,7 +29,6 @@ export class BookingsService {
             .andWhere('ticket.id IN (:...ticketIds)', { ticketIds })
             .andWhere('(ticket.complete = false AND ticket.reservationExpiry is NULL) OR (ticket.complete = false AND ticket.reservationExpiry < :currentTimestamp)', { currentTimestamp: dateNow })
             .getOne();
-        console.debug('**event', event)
         if (!event || !event.tickets?.length) return { status: 'EVENT_UNAVAILABLE' }
 
         const queryRunner = this.bookingRepository.manager.connection.createQueryRunner()
@@ -44,7 +42,6 @@ export class BookingsService {
                 .setLock('pessimistic_write')
                 .setOnLocked("skip_locked")
                 .getMany()
-            console.debug('tickets', tickets)
             if (!tickets?.length) return { status: 'TICKETS_UNAVAILABLE' }
 
             const reservationExpiresAt = new Date().getTime() + FIFTEEN_MINUTES_MS;
@@ -69,6 +66,35 @@ export class BookingsService {
             throw error;
         } finally {
             await queryRunner.release();
+        }
+    }
+
+    async confirmBooking(bookingId: string) {
+        const booking = await this.bookingRepository.findOneOrFail({ where: { id: bookingId }, relations: ['tickets'] })
+        if (booking.complete) return
+        if (booking.expiresAt < Date.now()) throw new Error('Booking expired')
+
+        const queryRunner = this.bookingRepository.manager.connection.createQueryRunner()
+        await queryRunner.startTransaction();
+        try {
+            const tickets = await queryRunner.manager.createQueryBuilder(Ticket, 'ticket')
+                .where('ticket.id IN (:...ticketIds)', { ticketIds: booking.tickets.map(ticket => ticket.id) })
+                .setLock('pessimistic_write')
+                .setOnLocked('skip_locked')
+                .getMany()
+
+            for (const ticket of tickets) {
+                ticket.complete = true
+            }
+
+            booking.complete = true
+            await queryRunner.manager.save([...tickets, booking])
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            await queryRunner.rollbackTransaction()
+            throw error
+        } finally {
+            await queryRunner.release()
         }
     }
 }

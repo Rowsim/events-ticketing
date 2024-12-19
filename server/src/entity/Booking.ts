@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm"
 import { User } from "./User"
 import { Ticket } from "./Ticket"
 import { Event } from './Event'
@@ -6,7 +6,7 @@ import { Event } from './Event'
 @Entity()
 export class Booking {
     @PrimaryGeneratedColumn('uuid')
-    id: number
+    id: string
 
     @ManyToOne(() => Event)
     event: Event

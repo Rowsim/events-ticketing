@@ -2,6 +2,7 @@ import { Body, ConflictException, Controller, Get, InternalServerErrorException,
 import { BookingsService } from "./bookings.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookingDto } from "./dto/create-booking.dto";
+import { CompleteBookingDto } from "./dto/complete-booking.dto";
 
 @Controller()
 export class BookingsController {
@@ -11,7 +12,7 @@ export class BookingsController {
     @Get('/bookings')
     async getUserBookings(@Req() request) {
         try {
-            return this.bookingsService.getUserBookings(request.user.sub)
+            return this.bookingsService.getUserCompleteBookings(request.user.sub)
         } catch (e) {
             console.error(e)
             throw new InternalServerErrorException()
@@ -31,7 +32,12 @@ export class BookingsController {
     }
 
     @Post('/booking/complete')
-    async completeBooking() {
-        //TODO callback/webhook that takes a bookingId to mark as complete
+    async completeBooking(@Body() completeBookingDto: CompleteBookingDto) {
+        try {
+            await this.bookingsService.confirmBooking(completeBookingDto.bookingId)
+        } catch (e) {
+            console.error(e)
+            throw new InternalServerErrorException()
+        }
     }
 }
