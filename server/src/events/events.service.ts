@@ -22,8 +22,15 @@ export class EventsService {
             .getOne()
     }
 
-    async getAllEvents(): Promise<Event[]> {
-        return await this.eventRepository.find()
+    async getAllEvents() {
+        return (await this.eventRepository.find({relations: ['venue']})).map(event => ({
+            ...event,
+            venue: {
+                id: event.venue.id,
+                name: event.venue.name,
+                location: event.venue.location
+            }
+        }))
     }
 
     async createEvent(createEventDto: CreateEventDto) {
