@@ -21,9 +21,9 @@ export class BookingsService {
             select: ['id', 'event', 'tickets']
         })
 
-        return bookings.map(booking => ({
+        return bookings?.map(booking => ({
             ...booking,
-            tickets: booking.tickets.map(ticket => ({ id: ticket.id, price: ticket.price }))
+            tickets: booking.tickets?.map(ticket => ({ id: ticket.id, price: ticket.price }))
         }))
     }
 
@@ -85,7 +85,7 @@ export class BookingsService {
         await queryRunner.startTransaction();
         try {
             const tickets = await queryRunner.manager.createQueryBuilder(Ticket, 'ticket')
-                .where('ticket.id IN (:...ticketIds)', { ticketIds: booking.tickets.map(ticket => ticket.id) })
+                .where('ticket.id IN (:...ticketIds)', { ticketIds: booking.tickets?.map(ticket => ticket.id) })
                 .setLock('pessimistic_write')
                 .setOnLocked('skip_locked')
                 .getMany()

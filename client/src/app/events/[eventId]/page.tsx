@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link';
-import { getEvent } from '../../services/api';
 import { useEffect, useState } from 'react';
 import TicketBooking from '../components/TicketBooking';
 import Spinner from '../components/Spinner';
@@ -14,15 +13,15 @@ export default function EventView({ params }: { params: Promise<{ eventId: numbe
 
     useEffect(() => {
         (async () => {
-            setEvent(await getEvent((await params).eventId));
+            const eventRes = await fetch(`/api/events/${(await params).eventId}`)
+            setEvent(await eventRes.json());
         })();
     }, [])
 
-    const ticketGroups: Record<string, number> = event?.tickets.reduce((acc: { [price: number]: number }, ticket: { price: number }) => {
+    const ticketGroups: Record<string, number> = event?.tickets?.reduce((acc: { [price: number]: number }, ticket: { price: number }) => {
         acc[ticket.price] = (acc[ticket.price] || 0) + 1;
         return acc;
     }, {});
-
 
     const handleQuantityChange = (price: string, increment = true) => {
         setSelectedTickets(prevSelectedTickets => {
@@ -83,7 +82,7 @@ export default function EventView({ params }: { params: Promise<{ eventId: numbe
                     <div className="mt-6">
                         <h2 className="text-2xl font-semibold mb-4">Tickets</h2>
                         <ul className='mb-4'>
-                            {Object.entries(ticketGroups).map(([price, ticketCount]) => (
+                            {Object.entries(ticketGroups || {}).map(([price, ticketCount]) => (
                                 <li key={price} className="flex justify-between items-center mt-4">
                                     <span className="text-lg font-mono">{ticketCount} tickets available at £{price}</span>
                                     <div className="flex items-center justify-between border border-gray-100 rounded h-8 w-22">

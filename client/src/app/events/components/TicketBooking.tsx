@@ -1,6 +1,5 @@
 'use client'
 import { useState } from "react";
-import { completeBooking, createBooking } from "../../services/api";
 
 interface TicketBookingProps {
     tickets: Record<string, number[]> | undefined;
@@ -20,17 +19,28 @@ export default function TicketBooking({ tickets, eventId, onConfirm, onCancel }:
         if (!tickets) return
         setCreatingBooking(true);
         try {
-            const createBookingResponse = await createBooking(eventId, Object.values(tickets).flat());
-            await completeBooking(createBookingResponse.bookingId);
+            const createBookingResponse = await (await fetch('/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ eventId, ticketIds: Object.values(tickets).flat() })
+            })).json();
+            await fetch('/api/bookings/complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bookingId: createBookingResponse.bookingId })
+            })
             setCreatingBooking(false);
+            onConfirm();
         } catch (e) {
             console.error(e);
             return;
         } finally {
             setCreatingBooking(false);
         }
-
-        onConfirm();
     };
 
     return (
