@@ -76,9 +76,15 @@ export default function EventView({ params }: { params: Promise<{ eventId: numbe
                 <div className="w-full md:w-1/2">
                     <img src={event.imageUrl} alt={event.name} className="w-full h-full object-cover" />
                 </div>
-                <div className="w-full md:w-1/2 p-8">
-                    <h1 className="text-4xl font-bold mb-1">{event.name}</h1>
-                    <p className="text-gray-600 text-lg mb-6">{new Date(event.date).toUTCString()}</p>
+                <div className="w-full md:w-1/2 p-6 md:p-8">
+                    <h1 className="text-4xl font-bold mb-1 text-center md:text-left">{event.name}</h1>
+                    <div className='flex justify-between text-center items-center flex-col md:text-left md:flex-row'>
+                        <div className=' '>
+                            <p className="text-gray-600 text-md mb-2">{new Date(event.date).toDateString()}</p>
+                            <p className="text-gray-600 text-lg">{event.venue.name}, {event.venue.location}</p>
+                        </div>
+                        <img className='w-32 rounded-lg' src={event.venue?.imageUrl} />
+                    </div>
                     <div className="mt-6">
                         <h2 className="text-2xl font-semibold mb-4">Tickets</h2>
                         <ul className='mb-4'>

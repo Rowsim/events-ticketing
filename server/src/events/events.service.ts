@@ -16,6 +16,7 @@ export class EventsService {
     ) { }
     async getEventWithAvailableTickets(id: number): Promise<Event> {
         return await this.eventRepository.createQueryBuilder('event')
+            .leftJoinAndSelect('event.venue', 'venue')
             .leftJoin(
                 'event.tickets',
                 'ticket',
