@@ -33,3 +33,10 @@ export const completeBooking = async (bookingId: string) => {
         body: JSON.stringify({ bookingId })
     });
 }
+
+export const getBookings = async () => {
+    const response = await fetch(`${HOST}/bookings`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+    });
+    return await response.json()
+}

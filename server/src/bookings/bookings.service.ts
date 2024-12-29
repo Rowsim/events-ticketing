@@ -15,10 +15,16 @@ export class BookingsService {
     ) { }
 
     async getUserCompleteBookings(userId: number) {
-        return await this.bookingRepository.find({
+        const bookings = await this.bookingRepository.find({
             where: { user: { id: userId }, complete: true },
-            relations: ['event', 'tickets']
+            relations: ['event', 'tickets'],
+            select: ['id', 'event', 'tickets']
         })
+
+        return bookings.map(booking => ({
+            ...booking,
+            tickets: booking.tickets.map(ticket => ({ id: ticket.id, price: ticket.price }))
+        }))
     }
 
     async createBooking(eventId: number, userId: number, ticketIds: number[]) {

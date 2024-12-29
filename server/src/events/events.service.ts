@@ -14,16 +14,20 @@ export class EventsService {
         @Inject(PROVIDER_NAMES.TICKET_REPOSITORY) private ticketRepository: Repository<Ticket>,
         @Inject(PROVIDER_NAMES.ENTITY_MANAGER) private entityManager: EntityManager,
     ) { }
-
     async getEventWithAvailableTickets(id: number): Promise<Event> {
         return await this.eventRepository.createQueryBuilder('event')
-            .leftJoinAndSelect('event.tickets', 'ticket', 'ticket.booking IS NULL')
+            .leftJoin(
+                'event.tickets',
+                'ticket',
+                '(ticket.complete = false AND ticket.reservationExpiry is NULL) OR (ticket.complete = false AND ticket.reservationExpiry < :currentTimestamp)', { currentTimestamp: Date.now() }
+            )
+            .addSelect(['ticket.id', 'ticket.price'])
             .where('event.id = :id', { id })
             .getOne()
     }
 
     async getAllEvents() {
-        return (await this.eventRepository.find({relations: ['venue']})).map(event => ({
+        return (await this.eventRepository.find({ relations: ['venue'] })).map(event => ({
             ...event,
             venue: {
                 id: event.venue.id,
