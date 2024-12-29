@@ -1,12 +1,28 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+// TODO
+// add venue creation api and form
+interface Venue {
+    id: string;
+    name: string;
+}
 
 export default function Management() {
     const [activeTab, setActiveTab] = useState('event');
     const [tickets, setTickets] = useState([{ price: '', quantity: '' }]);
     const [creatingEvent, setCreatingEvent] = useState(false);
     const [createdEventId, setCreatedEventId] = useState<string | undefined>();
+    const [venues, setVenues] = useState<Venue[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const response = await fetch('/api/venues/list');
+            const data = await response.json();
+            setVenues(data);
+        })()
+    }, []);
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
@@ -138,19 +154,23 @@ export default function Management() {
                                     type="date"
                                     name="date"
                                     id="date"
+                                    defaultValue={new Date().toISOString().split('T')[0]}
                                     required
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
                                 />
                             </div>
                             <div>
-                                <label htmlFor="venueId" className="block text-gray-700">Venue ID</label>
-                                <input
-                                    type="text"
+                                <label htmlFor="venueId" className="block text-gray-700">Venue</label>
+                                <select
                                     name="venueId"
                                     id="venueId"
                                     required
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
-                                />
+                                >
+                                    {venues.map(venue => (
+                                        <option key={venue.id} value={venue.id}>{venue.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
                                 <label htmlFor="imageUrl" className="block text-gray-700">Image URL</label>
