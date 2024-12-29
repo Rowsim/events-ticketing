@@ -70,6 +70,7 @@ export class BookingsService {
     }
 
     async confirmBooking(bookingId: string) {
+        if (!bookingId) throw new Error('Invalid booking ID')
         const booking = await this.bookingRepository.findOneOrFail({ where: { id: bookingId }, relations: ['tickets'] })
         if (booking.complete) return
         if (booking.expiresAt < Date.now()) throw new Error('Booking expired')
