@@ -16,7 +16,7 @@ export async function middleware(req: NextRequestType) {
         if (!token) {
             return NextResponse.redirect(new URL('/auth/login', req.url));
         }
-        // check if token is valid
+        // TODO check if token is valid
     }
 
     return NextResponse.next();

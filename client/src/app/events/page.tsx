@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import EventCard from './components/EventCard';
 import FilterBar from './components/FilterBar';
-// import { getEvents } from '../services/api';
 
 export default function Events() {
     const [search, setSearch] = useState('');

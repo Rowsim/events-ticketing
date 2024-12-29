@@ -1,15 +1,13 @@
 import { cookies } from "next/headers";
 import { API_HOST } from "../services/api";
 
-
-const profileRes = await fetch(`${API_HOST}/auth/profile`, {
-  headers: {
-    'Authorization': `Bearer ${(await cookies()).get('access_token')?.value}`
-  }
-});
-const profile = await profileRes.json();
-
 export default async function Account() {
+  const profileRes = await fetch(`${API_HOST}/auth/profile`, {
+    headers: {
+      'Authorization': `Bearer ${(await cookies()).get('access_token')?.value}`
+    }
+  });
+  const profile = await profileRes.json();
   const sessionEnd = new Date(profile.exp * 1000).toLocaleString();
 
   return (

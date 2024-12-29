@@ -2,14 +2,14 @@ import { cookies } from 'next/headers';
 import { API_HOST } from '../services/api';
 import BookingCard from '../components/BookingCard';
 
-const bookingsRes = await fetch(`${API_HOST}/bookings`, {
-    headers: {
-        'Authorization': `Bearer ${(await cookies()).get('access_token')?.value}`
-    }
-});
-const bookings: any[] = await bookingsRes.json()
-
 export default async function Bookings() {
+    const bookingsRes = await fetch(`${API_HOST}/bookings`, {
+        headers: {
+            'Authorization': `Bearer ${(await cookies()).get('access_token')?.value}`
+        }
+    });
+    const bookings: any[] = await bookingsRes.json()
+
     return (
         <div className="container mx-auto p-8">
             {!bookings.length ? <p>No bookings found</p> : (
