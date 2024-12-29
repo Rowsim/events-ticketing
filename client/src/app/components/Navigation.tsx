@@ -27,6 +27,9 @@ export default function NavBar() {
                     <Link href="/bookings">
                         <span className={linkClasses('/bookings')}>Bookings</span>
                     </Link>
+                    <Link href="/management">
+                        <span className={linkClasses('/management')}>Management</span>
+                    </Link>
                     <Link href="/account">
                         <span className={linkClasses('/account')}>Account</span>
                     </Link>
