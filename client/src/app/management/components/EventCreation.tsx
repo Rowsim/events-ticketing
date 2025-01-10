@@ -130,7 +130,7 @@ export default function EventCreation() {
                             required
                             className="w-full p-2 border border-gray-300 rounded mt-1"
                         >
-                            {venues.map(venue => (
+                            {venues?.length && venues.map(venue => (
                                 <option key={venue.id} value={venue.id}>{venue.name}</option>
                             ))}
                         </select>

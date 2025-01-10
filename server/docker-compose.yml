@@ -13,6 +13,19 @@ services:
       # - ./init-scripts:/docker-entrypoint-initdb.d
     restart: always
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
+    container_name: elasticsearch-db
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+    restart: always
+
   nestjs-ticketing-server:
     build:
       context: .
@@ -22,6 +35,7 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+      - elasticsearch
     environment:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
@@ -34,3 +48,6 @@ services:
 
 volumes:
   postgres-data:
+    driver: local
+  elasticsearch-data:
+    driver: local

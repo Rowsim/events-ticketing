@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { NextRequest as NextRequestType } from 'next/server';
 
 const SIGNOUT_PATH = "/signout"
-const GUARDED_PATHS = ["/bookings", "/account"]
+const GUARDED_PATHS = ["/bookings", "/account", '/management']
 
 export async function middleware(req: NextRequestType) {
     if (req.nextUrl.pathname.includes(SIGNOUT_PATH)) {
