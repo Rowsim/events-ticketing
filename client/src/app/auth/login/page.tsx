@@ -4,6 +4,24 @@ import { redirect } from 'next/navigation'
 
 export default function Login() {
 
+    const handleCreateTestUser = async () => {
+        try {
+          const response = await fetch('/api/login/test-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: 'Testuser', password: 'password' }),
+            });
+
+            if (response.ok) {
+                alert('Test user created, username: Testuser, password: password1')
+            }
+        } catch (e) {
+          console.error(e)
+        }
+    }
+
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -34,7 +52,7 @@ export default function Login() {
                             name="username"
                             id="username"
                             autoComplete="username"
-                            placeholder="Username"
+                            placeholder="Test-user"
                             required
                             className="w-full p-2 border border-gray-300 rounded mt-1"
                         />
@@ -45,7 +63,7 @@ export default function Login() {
                             type="password"
                             name="password"
                             id="password"
-                            placeholder="Password"
+                            placeholder="password"
                             autoComplete="current-password"
                             required
                             className="w-full p-2 border border-gray-300 rounded mt-1"
@@ -57,7 +75,12 @@ export default function Login() {
                     >
                         Login
                     </button>
+
+                    <button onClick={handleCreateTestUser} type='button' className="w-full bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+                         Create test user
+                     </button>
                 </form>
+
             </div>
         </div>
     );
