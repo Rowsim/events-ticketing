@@ -9,6 +9,7 @@ export async function POST(req: Request) {
             body: JSON.stringify({ username, password })
         })).json();
         const { access_token } = loginResponse;
+        if (!access_token) throw new Error('Bad access token')
 
         return new Response(null, {
             status: 200, headers: {

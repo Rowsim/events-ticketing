@@ -51,7 +51,7 @@ export default function EventSearchBar() {
                 />
 
                 {isInputedFocused && results?.length > 0 && (
-                    <ul className="absolute w-full mt-2 bg-gray-900 bg-opacity-75 border-2 border-orange-500 rounded-md shadow-lg">
+                    <ul className="absolute z-50 w-full mt-2 bg-gray-900 bg-opacity-75 border-2 border-orange-500 rounded-md shadow-lg">
                         {results.map((result: any, index: number) => (
                             <Link key={index} href={`/events/${result.id}`}>
                                 <li className="p-2 hover:bg-gray-500 cursor-pointer text-white">

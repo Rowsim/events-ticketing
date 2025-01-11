@@ -12,7 +12,7 @@ export default function NavBar() {
             : 'text-gray-300 hover:text-white transition duration-300 cursor-pointer';
 
     return (
-        <nav className="bg-gray-900 p-4 shadow-lg">
+        <nav className="bg-gray-900 p-4 shadow-lg sticky top-0 z-50">
             <div className="container mx-auto flex justify-between items-center">
                 <Link href='/'>
                     <div className="text-white text-2xl font-bold flex items-center space-x-2">
