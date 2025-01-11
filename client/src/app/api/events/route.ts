@@ -3,8 +3,10 @@ import { API_HOST } from "../../services/api";
 
 export async function GET() {
     try {
+        console.debug('GET EVENTS', API_HOST)
         return await fetch(`${API_HOST}/events`);
     } catch (error) {
+        console.debug('get events error', error)
         return new Response(null, { status: 500 })
     }
 }

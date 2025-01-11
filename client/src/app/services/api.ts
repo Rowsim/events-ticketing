@@ -1,2 +1,1 @@
-export const APP_HOST = 'http://localhost:3006';
-export const API_HOST = 'http://localhost:3000';
+export const API_HOST = process.env.NEXT_PUBLIC_TICKETING_SERVER_HOST || 'http://localhost:3000';

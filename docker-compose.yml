@@ -9,8 +9,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: ticketing
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      # - ./init-scripts:/docker-entrypoint-initdb.d
+      - server_postgres-data:/var/lib/postgresql/data
     restart: always
 
   elasticsearch:
@@ -21,14 +20,14 @@ services:
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - server_elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - '9200:9200'
     restart: always
 
   nestjs-ticketing-server:
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile
     container_name: nestjs-ticketing
     ports:
@@ -42,12 +41,23 @@ services:
       DATABASE_USER: test
       DATABASE_PASSWORD: password
       DATABASE_NAME: ticketing
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      ELASTICSEARCH_NODE: http://elasticsearch
+      ELASTICSEARCH_NODE_PORT: 9200
+
+  nextjs-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: nextjs-client
+    ports:
+      - "3006:3006"
+    depends_on:
+      - nestjs-ticketing-server
+    environment:
+      NEXT_PUBLIC_TICKETING_SERVER_HOST: http://nestjs-ticketing-server:3000
 
 volumes:
-  postgres-data:
-    driver: local
-  elasticsearch-data:
-    driver: local
+  server_postgres-data:
+    external: true
+  server_elasticsearch-data:
+    external: true

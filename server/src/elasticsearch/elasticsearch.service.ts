@@ -3,7 +3,7 @@ import { Client } from '@elastic/elasticsearch';
 
 @Injectable()
 export class ElasticsearchService {
-    private readonly client = new Client({ node: process.env.ELASTICSEARCH_NODE || 'http://localhost:9200' });
+    private readonly client = new Client({ node: `${process.env.ELASTICSEARCH_NODE}:${process.env.ELASTICSEARCH_NODE_PORT}` || 'http://localhost:9200' });
 
     async loadAll(index: string) {
         const response = await this.client.search({
