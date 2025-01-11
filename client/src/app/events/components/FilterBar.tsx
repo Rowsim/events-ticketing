@@ -13,7 +13,7 @@ export default function FilterBar({ search, location, options, onSearchChange, o
                 type="text"
                 value={search}
                 onChange={onSearchChange}
-                placeholder="Search events"
+                placeholder="Filter events"
                 className="p-2 border border-gray-300 rounded"
             />
             <select value={location} onChange={onLocationChange} className="p-2 border border-gray-300 rounded">

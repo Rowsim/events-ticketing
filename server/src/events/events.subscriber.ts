@@ -27,11 +27,11 @@ export class EventsSubscriber implements EntitySubscriberInterface<Event> {
     async afterLoad(entity: Event, event?: LoadEvent<Event>): Promise<Promise<any> | void> {
         try {
             // Testing indexing old data
-            // await this.elasticsearchService.index(
-            //     EVENTS_ES_INDEX,
-            //     entity.id.toString(),
-            //     { name: entity.name, date: entity.date, imageUrl: entity.imageUrl }
-            // )
+            await this.elasticsearchService.index(
+                EVENTS_ES_INDEX,
+                entity.id.toString(),
+                { id: entity.id, name: entity.name, date: entity.date, imageUrl: entity.imageUrl }
+            )
         } catch (e) {
             console.error(e)
         }
@@ -56,7 +56,7 @@ export class EventsSubscriber implements EntitySubscriberInterface<Event> {
             await this.elasticsearchService.update(
                 EVENTS_ES_INDEX,
                 entity.id.toString(),
-                { name: entity.name, date: entity.date, imageUrl: entity.imageUrl }
+                { id: entity.id, name: entity.name, date: entity.date, imageUrl: entity.imageUrl }
             )
         } catch (e) {
             console.error('Failed to index event in elasticsearch', e)

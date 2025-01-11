@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import EventSearchBar from './EventSearchBar';
 
 export default function NavBar() {
     const pathname = usePathname()
@@ -19,6 +20,8 @@ export default function NavBar() {
                         <span>Events Ticketing</span>
                     </div>
                 </Link>
+
+                <EventSearchBar />
 
                 <div className="space-x-6">
                     <Link href="/events">
