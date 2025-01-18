@@ -1,9 +1,18 @@
-# Ticketing
-Small event ticket booking app
+# Events Ticketing
+Small example event ticket booking app built with:
+
+![App screenshot](/app-screenshot.png?raw=true "Event Ticketing App")
+
+### Backend
+- NestJS
+- PostgreSQL & TypeORM
+- Elasticsearch
+
+### Frontend
+- NextJS
 
 ## How to run
 In root directory:
 ```docker-compose up```
 
-Client should run on ```localhost:3006```
-Server should run on ```localhost:3000```
+Client runs on ```localhost:3006```, Server runs on ```localhost:3000```
